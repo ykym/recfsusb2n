@@ -25,7 +25,6 @@ B25      = -DB25
 
 必要な物:
 -  g++ コンパイル環境(cmake使用)
--  boostライブラリ
 
 まるも氏のARIB STD-B25 仕様確認テストプログラムに、FSUSB2のチューナーをアクセスするように改変したものです。
 元のプログラムについては
@@ -33,7 +32,7 @@ arib25/readme.txt を参照してください。
 
 ### for debian
 ```bash
-sudo apt install make libboost-all-dev
+sudo apt install make
 cd src
 make
 ```

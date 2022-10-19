@@ -3,7 +3,7 @@
 #ifndef _EM2874CORE_HPP_
 #define _EM2874CORE_HPP_
 
-#include <boost/thread.hpp>
+#include <thread>
 
 #include <inttypes.h>
 #include <iostream>
@@ -67,7 +67,7 @@ private:
 
 	bool isStream;
 	TsIoThread *ts_func;
-	boost::thread* ts_thread;
+	std::thread* ts_thread;
 };
 
 #endif

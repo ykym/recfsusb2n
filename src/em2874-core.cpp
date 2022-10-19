@@ -2,8 +2,7 @@
 #include <unistd.h>
 #include <string.h>
 
-#include <boost/filesystem/path.hpp>
-#include <boost/filesystem/operations.hpp>
+#include <filesystem>
 
 #include "usbops.hpp"
 #include "em2874-core.hpp"
@@ -107,21 +106,21 @@ EM2874Device* EM2874Device::AllocDevice()
 {
 	EM2874Device *pDev = new EM2874Device();
 
-	boost::filesystem::path base_dir = boost::filesystem::path(BASE_DIR_UDEV);
-	if (!boost::filesystem::exists(base_dir) || !boost::filesystem::is_directory(base_dir)) {
-		base_dir = boost::filesystem::path(BASE_DIR_USBFS);
+	std::filesystem::path base_dir = std::filesystem::path(BASE_DIR_UDEV);
+	if (!std::filesystem::exists(base_dir) || !std::filesystem::is_directory(base_dir)) {
+		base_dir = std::filesystem::path(BASE_DIR_USBFS);
 	}
 
 	bool isFound (false);
 	// base_dirからデバイスファイルを探す
-	boost::filesystem::directory_iterator end;
-	for (boost::filesystem::directory_iterator bus_iter(base_dir); bus_iter != end && !isFound; ++bus_iter) {
+	std::filesystem::directory_iterator end;
+	for (std::filesystem::directory_iterator bus_iter(base_dir); bus_iter != end && !isFound; ++bus_iter) {
 		// バスでループ
-		if (boost::filesystem::is_directory(*bus_iter)) {
+		if (std::filesystem::is_directory(*bus_iter)) {
 			// ディレクトリのみ
-			for (boost::filesystem::directory_iterator dev_iter(*bus_iter); dev_iter != end && !isFound; ++dev_iter) {
+			for (std::filesystem::directory_iterator dev_iter(*bus_iter); dev_iter != end && !isFound; ++dev_iter) {
 				// バスに繋がっているデバイスでループ
-				if (!boost::filesystem::is_directory(*dev_iter)) {
+				if (!std::filesystem::is_directory(*dev_iter)) {
 					// 開く
 					if (pDev->openDevice(dev_iter->path().c_str())) {
 						isFound = true;
@@ -378,7 +377,7 @@ void EM2874Device::startStream()
 	writeReg(EM2874_REG_TS_ENABLE, EM2874_TS1_CAPTURE_ENABLE | EM2874_TS1_NULL_DISCARD);
 	usb_setinterface(fd, 0, 1);
 	ts_func = new TsIoThread (fd, EM2874_EP_TS1);
-	ts_thread = new boost::thread(boost::ref(*ts_func));
+	ts_thread = new std::thread(std::ref(*ts_func));
 
 	isStream = true;
 }
